@@ -69,7 +69,7 @@
  
   .hide-element { display: none !important; }
 #worksheet-area {
-  transform: scale(0.97);
+  transform: none;
   transform-origin: top center;
 }
   /* --- ⬇︎【修正】印刷時だけの絶対ルール（A4一枚にキチッと収める） --- */
@@ -80,7 +80,7 @@
 
     #worksheet-area {
   display: block !important;
-  width: 190mm !important;
+  width: 180mm !important;
   margin: 0 auto !important;
   padding: 0 !important;
   box-sizing: border-box !important;
@@ -90,13 +90,13 @@
    
     /* 💡【追加】印刷時だけ各問題の隙間（外側の余白）を少し詰める（12px → 6px） */
     .question-block{
-    margin-bottom:4px !important;
-    padding:6px 10px !important;
+    margin-bottom:6px !important;
+    padding:8px 10px !important;
 }
 
     /* 【追加】印刷時だけ英語・疑問文のノート（解答欄）の高さを少し詰める（44px → 38px） */
     .write-box {
-      height: 34x !important;
+     height: 34px !important;
     }
     /* 【追加】4本線ノートを選んでいる場合、線の幅も38pxに合わせて自動調整 */
     .write-box.four-lines {
@@ -126,7 +126,7 @@
     .hide-element { display: none !important; }
    
     /*  プリンターやブラウザ固有の余白対策として、上下左右の余白を「10mm」に微調整 */
-    @page { size: A4 portrait; margin: 6mm; }
+    @page { size: A4 portrait; margin: 12mm; }
   }
 </style>
 </head>
