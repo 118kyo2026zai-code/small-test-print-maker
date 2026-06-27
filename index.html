@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>おうち英語 プリントカスタムメーカー</title>
+<style>
+  /* --- アプリ操作画面（WEB画面）のスタイル --- */
+  body { margin: 0; padding: 0; font-family: sans-serif; background-color: #f4f6f8; color: #2c3e50; }
+  .app-container { max-width: 850px; margin: 30px auto; background: #fff; padding: 30px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+  .app-header { text-align: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; margin-bottom: 25px; }
+  .app-title { margin: 0; color: #2c3e50; font-size: 22px; font-weight: bold; }
+ 
+  .guide-box { background: #fff9db; border-left: 5px solid #fab005; padding: 15px; border-radius: 6px; font-size: 14px; margin-bottom: 25px; line-height: 1.6; color: #856404; font-weight: bold; }
+
+  .control-section { background: #eef2f7; padding: 15px 20px; border-radius: 10px; margin-bottom: 25px; border: 1px solid #cbd5e1; display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+  .control-group { display: flex; align-items: center; gap: 8px; font-weight: bold; font-size: 14px; cursor: pointer; }
+  .control-group input { width: 18px; height: 18px; }
+  .btn-action { background: #7f8c8d; color: white; border: none; padding: 8px 14px; font-size: 12px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+
+  .form-section { margin-bottom: 30px; }
+  .q-input-card { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+ 
+  .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; }
+  .label-num { background: #e67e22; color: white; padding: 4px 12px; border-radius: 20px; font-size: 14px; font-weight: bold; }
+  .card-title { font-size: 14px; color: #64748b; font-weight: bold; }
+
+  .input-row { display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+  .input-field { flex: 1; min-width: 160px; display: flex; flex-direction: column; gap: 5px; }
+  .input-field label { font-size: 12px; color: #475569; font-weight: bold; }
+  .input-field input { width: 100%; padding: 10px; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 14px; font-weight: bold; box-sizing: border-box; }
+  .input-field input:focus { border-color: #e67e22; outline: none; }
+ 
+  .sub-inputs { background: #f1f5f9; padding: 12px; border-radius: 8px; border: 1px dashed #cbd5e1; }
+
+  .btn-print { display: block; width: 100%; background: #e67e22; color: white; border: none; padding: 16px; font-size: 18px; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 20px; box-shadow: 0 4px 6px rgba(230,126,34,0.2); }
+
+  .preview-title { font-size: 16px; font-weight: bold; margin-bottom: 10px; color: #34495e; text-align: center; }
+  .preview-scroll-box { border: 3px solid #cbd5e1; background: #95a5a6; padding: 20px; overflow-x: auto; display: flex; justify-content: center; }
+
+  /* --- プリント本体のスタイル（ブラウザ表示用） --- */
+  #worksheet-area { width: 210mm; background-color: #fdfbf7; padding: 15mm; box-sizing: border-box; }
+  .ws-header { text-align: center; margin-bottom: 10px; }
+  .ws-title { font-size: 18pt; font-weight: bold; color: #e67e22; margin: 0 0 5px 0; }
+  .ws-notice { font-size: 8.5pt; color: #ba6000; background-color: #fff3cd; border: 1px dashed #f39c12; padding: 5px; border-radius: 5px; font-weight: bold; text-align: center; margin-bottom: 15px;}
+ 
+  .hint-container { display: flex; gap: 6px; margin-bottom: 15px; }
+  .hint-column { flex: 1; background-color: #fff; border-radius: 6px; padding: 6px; border: 1px solid #e2e8f0; }
+  .hint-title { font-size: 8.5pt; font-weight: bold; text-align: center; margin-bottom: 6px; border-bottom: 2px solid #e67e22; color: #e67e22; padding-bottom: 2px; }
+  .hint-list { font-size: 8.5pt; line-height: 1.4; text-align: left; padding: 0 4px; }
+  .hint-item { margin-bottom: 4px; border-bottom: 1px dotted #e2e8f0; padding-bottom: 2px; display: flex; justify-content: space-between; }
+  .hint-item:last-child { border-bottom: none; }
+  .hint-jp { color: #7f8c8d; font-size: 7.5pt; font-weight: bold; }
+  .hint-en { font-family: serif; color: #2c3e50; font-size: 9.5pt; font-weight: bold; }
+
+  .question-block { margin-bottom: 12px; background-color: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 14px; }
+  .question-text { font-size: 11pt; font-weight: bold; margin-bottom: 6px; color: #2c3e50; }
+  .question-number { color: #fff; border-radius: 50%; width: 20px; height: 20px; display: inline-block; text-align: center; line-height: 20px; font-size: 10pt; margin-right: 6px; background: #e67e22; font-weight: bold; }
+ 
+  .answer-table { display: table; width: 100%; }
+  .answer-row { display: table-row; }
+  .answer-label { display: table-cell; width: 65px; font-weight: bold; font-size: 9.5pt; vertical-align: middle; padding: 3px 0; color: #7f8c8d;}
+  .answer-cell { display: table-cell; }
+  .write-box { border: 2px solid #c8d6e5; background-color: #ffffff; height: 44px; border-radius: 6px; position: relative; }
+  .write-box.four-lines { background-image: linear-gradient(rgba(231, 76, 60, 0.2) 1px, transparent 1px), linear-gradient(rgba(52, 152, 219, 0.1) 1px, transparent 1px), linear-gradient(rgba(52, 152, 219, 0.1) 1px, transparent 1px), linear-gradient(rgba(52, 152, 219, 0.1) 1px, transparent 1px); background-size: 100% 44px; background-position: 0 31px, 0 9px, 0 20px, 0 42px; background-repeat: no-repeat; }
+
+  .checklist-container { margin-top: 15px; background-color: #eef2f7; border: 2px dashed #b2bec3; border-radius: 8px; padding: 10px; }
+  .checklist-flex { display: flex; gap: 30px; font-size: 9.5pt; font-weight: bold; justify-content: center; color: #2c3e50; }
+ 
+  .hide-element { display: none !important; }
+
+  /* --- ⬇︎【修正】印刷時だけの絶対ルール（A4一枚にキチッと収める） --- */
+  @media print {
+    .app-container { background: transparent !important; box-shadow: none !important; margin: 0 !important; padding: 0 !important; max-width: 100% !important; }
+    .app-header, .guide-box, .control-section, .form-section, .preview-title, .btn-print { display: none !important; }
+    .preview-scroll-box { background: transparent !important; border: none !important; padding: 0 !important; overflow: visible !important; display: block !important; }
+
+    #worksheet-area {
+      display: block !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      padding: 0 !important;
+      background: transparent !important;
+    }
+   
+    /* 💡【追加】印刷時だけ各問題の隙間（外側の余白）を少し詰める（12px → 6px） */
+    .question-block {
+      margin-bottom: 6px !important;
+      padding: 8px 12px !important; /* 内側の余白も少しスリムに */
+    }
+
+    /* 【追加】印刷時だけ英語・疑問文のノート（解答欄）の高さを少し詰める（44px → 38px） */
+    .write-box {
+      height: 38px !important;
+    }
+    /* 【追加】4本線ノートを選んでいる場合、線の幅も38pxに合わせて自動調整 */
+    .write-box.four-lines {
+      background-size: 100% 38px !important;
+      background-position: 0 27px, 0 8px, 0 17px, 0 36px !important;
+    }
+
+    /* 【追加】印刷時だけ最下部のチェックリストの隙間を詰める */
+    .checklist-container {
+      margin-top: 8px !important;
+      padding: 6px !important;
+    }
+
+    .hint-container { display: flex !important; }
+    .hint-item { display: flex !important; }
+    .answer-table { display: table !important; }
+    .answer-row { display: table-row !important; }
+    .answer-label, .answer-cell { display: table-cell !important; }
+    .checklist-flex { display: flex !important; }
+   
+    body {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      background: #fff !important;
+    }
+
+    .hide-element { display: none !important; }
+   
+    /*  プリンターやブラウザ固有の余白対策として、上下左右の余白を「10mm」に微調整 */
+    @page { size: A4 portrait; margin: 10mm; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app-container">
+  <div class="app-header">
+    <h1 class="app-title">英語 小テストプリントカスタムメーカー</h1>
+  </div>
+
+  <div class="guide-box">
+     【きれいに作るコツ】このプリントは「①だれが ②どうする ③なにを」の文が作れます。<br>
+    学習進度に合わせて「④どこで」「⑤いつ」も追加できます。単語を見せたくないときは、ヒントを表示のチェックをはずしてください。
+  </div>
+
+  <div class="control-section">
+    <label class="control-group"><input type="checkbox" id="toggle-hint" checked onchange="update()"> 💡 ヒントを表示</label>
+    <label class="control-group"><input type="checkbox" id="toggle-lines" onchange="update()"> ✍️ 4本線を入れる</label>
+    <div style="margin-left: auto; display: flex; gap: 8px;">
+      <button class="btn-action" onclick="loadBasicSample()">見本（3要素）</button>
+      <button class="btn-action" onclick="loadFullSample()">見本（フル要素）</button>
+      <button class="btn-action" style="background:#e74c3c;" onclick="clearAll()">リセット</button>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div id="form-rows-container"></div>
+    <button class="btn-print" onclick="window.print()"> A4印刷・PDF保存</button>
+  </div>
+
+  <div class="preview-title"> プリントのプレビュー（A4サイズ1枚）</div>
+ 
+  <div class="preview-scroll-box">
+    <div id="worksheet-area">
+      <div class="ws-header">
+        <div class="ws-title">★ 英語の 文を つくってみよう！ ★</div>
+        <div class="ws-notice">文のはじめは大文字、おわりはピリオド(.)かクエスチョン(?)をわすれずに！</div>
+      </div>
+
+      <div class="hint-container" id="ws-hint-container">
+        <div class="hint-column" id="col-sub"><div class="hint-title">①しゅご</div><div class="hint-list" id="list-sub"></div></div>
+        <div class="hint-column" id="col-verb"><div class="hint-title">②どうし</div><div class="hint-list" id="list-verb"></div></div>
+        <div class="hint-column" id="col-noun"><div class="hint-title">③めいし</div><div class="hint-list" id="list-noun"></div></div>
+        <div class="hint-column" id="col-place"><div class="hint-title">④どこで</div><div class="hint-list" id="list-place"></div></div>
+        <div class="hint-column" id="col-time"><div class="hint-title">⑤いつ</div><div class="hint-list" id="list-time"></div></div>
+      </div>
+
+      <div id="questions-container"></div>
+
+      <div class="checklist-container">
+        <div class="checklist-flex">
+          <div>□ 大文字・小文字にきをつけましたか？</div>
+          <div>□ ピリオド(.)や クエスチョン(?)を わすれていませんか？</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let questions = [
+    { num: 1, subJp: "わたしは", subEn: "I", verbJp: "教え", verbEn: "teach", nounJp: "算数", nounEn: "math", placeJp: "", placeEn: "", timeJp: "", timeEn: "" },
+    { num: 2, subJp: "あなたは", subEn: "You", verbJp: "し", verbEn: "play", nounJp: "野球", nounEn: "baseball", placeJp: "公園で", placeEn: "in the park", timeJp: "", timeEn: "" },
+    { num: 3, subJp: "わたしたちは", subEn: "We", verbJp: "話し", verbEn: "speak", nounJp: "英語", nounEn: "English", placeJp: "", placeEn: "", timeJp: "毎日", timeEn: "every day" },
+    { num: 4, subJp: "あなたたちは", subEn: "You", verbJp: "使い", verbEn: "use", nounJp: "PC", nounEn: "a computer", placeJp: "家で", placeEn: "at home", timeJp: "", timeEn: "" },
+    { num: 5, subJp: "ぼくは", subEn: "I", verbJp: "ほしい", verbEn: "want", nounJp: "自転車", nounEn: "a bicycle", placeJp: "", placeEn: "", timeJp: "", timeEn: "" }
+  ];
+
+  function renderForm() {
+    const container = document.getElementById('form-rows-container');
+    container.innerHTML = questions.map(q => `
+      <div class="q-input-card">
+        <div class="card-header">
+          <span class="label-num">第 ${q.num} 問</span>
+          <span class="card-title">基本の文（主語・動詞・名詞）を入力してください</span>
+        </div>
+       
+        <div class="input-row">
+          <div class="input-field"><label>① しゅご（日本語）</label><input type="text" id="in-subJp-${q.num}" value="${q.subJp}" oninput="update()"></div>
+          <div class="input-field"><label>① しゅご（英語）</label><input type="text" id="in-subEn-${q.num}" value="${q.subEn}" oninput="update()"></div>
+         
+          <div class="input-field"><label>③ なにを（日本語）</label><input type="text" id="in-nounJp-${q.num}" value="${q.nounJp}" oninput="update()"></div>
+          <div class="input-field"><label>③ なにを（英語）</label><input type="text" id="in-nounEn-${q.num}" value="${q.nounEn}" oninput="update()"></div>
+
+          <div class="input-field"><label>② どうする（日本語）</label><input type="text" id="in-verbJp-${q.num}" value="${q.verbJp}" oninput="update()"></div>
+          <div class="input-field"><label>② どうする（英語）</label><input type="text" id="in-verbEn-${q.num}" value="${q.verbEn}" oninput="update()"></div>
+        </div>
+       
+        <div class="sub-inputs">
+          <div class="input-row" style="margin-bottom: 0;">
+            <div class="input-field"><label>④ どこで（日本語）</label><input type="text" id="in-placeJp-${q.num}" value="${q.placeJp}" oninput="update()" placeholder="（空欄でもOK）"></div>
+            <div class="input-field"><label>④ どこで（英語）</label><input type="text" id="in-placeEn-${q.num}" value="${q.placeEn}" oninput="update()"></div>
+            <div class="input-field"><label>⑤ いつ（日本語）</label><input type="text" id="in-timeJp-${q.num}" value="${q.timeJp}" oninput="update()" placeholder="（空欄でもOK）"></div>
+            <div class="input-field"><label>⑤ いつ（英語）</label><input type="text" id="in-timeEn-${q.num}" value="${q.timeEn}" oninput="update()"></div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function update() {
+    const isHintVisible = document.getElementById('toggle-hint').checked;
+    const isLinesEnabled = document.getElementById('toggle-lines').checked;
+   
+    document.getElementById('ws-hint-container').className = isHintVisible ? "hint-container" : "hide-element";
+
+    let hints = { sub:[], verb:[], noun:[], place:[], time:[] };
+    let qContainer = document.getElementById('questions-container');
+    qContainer.innerHTML = "";
+
+    for(let i=1; i<=5; i++) {
+      const d = {
+        subJp: document.getElementById(`in-subJp-${i}`).value, subEn: document.getElementById(`in-subEn-${i}`).value,
+        verbJp: document.getElementById(`in-verbJp-${i}`).value, verbEn: document.getElementById(`in-verbEn-${i}`).value,
+        nounJp: document.getElementById(`in-nounJp-${i}`).value, nounEn: document.getElementById(`in-nounEn-${i}`).value,
+        placeJp: document.getElementById(`in-placeJp-${i}`).value, placeEn: document.getElementById(`in-placeEn-${i}`).value,
+        timeJp: document.getElementById(`in-timeJp-${i}`).value, timeEn: document.getElementById(`in-timeEn-${i}`).value
+      };
+
+      if(d.subEn) hints.sub.push({ en: d.subEn, jp: d.subJp });
+      if(d.verbEn) hints.verb.push({ en: d.verbEn, jp: d.verbJp });
+      if(d.nounEn) hints.noun.push({ en: d.nounEn, jp: d.nounJp });
+      if(d.placeEn) hints.place.push({ en: d.placeEn, jp: d.placeJp });
+      if(d.timeEn) hints.time.push({ en: d.timeEn, jp: d.timeJp });
+
+      let autoJpSentence = "";
+      if(d.subJp) autoJpSentence += d.subJp + " ";
+      if(d.timeJp) autoJpSentence += d.timeJp + " ";
+      if(d.placeJp) autoJpSentence += d.placeJp + " ";
+     
+      if(d.nounJp) {
+        if(d.verbJp === "ほしい") { autoJpSentence += d.nounJp + "が "; }
+        else { autoJpSentence += d.nounJp + "を "; }
+      }
+     
+      if(d.verbJp) {
+        if(d.verbJp === "ほしい") { autoJpSentence += "ほしいです。"; }
+        else { autoJpSentence += d.verbJp + "ます。"; }
+      }
+
+      qContainer.innerHTML += `
+        <div class="question-block">
+          <div class="question-text"><span class="question-number">${i}</span> ${autoJpSentence}</div>
+          <div class="answer-table">
+            <div class="answer-row"><div class="answer-label">（ 英 ）</div><div class="answer-cell"><div class="write-box ${isLinesEnabled?'four-lines':''}"></div></div></div>
+            <div class="answer-row"><div class="answer-label">（ぎもん）</div><div class="answer-cell"><div class="write-box ${isLinesEnabled?'four-lines':''}"></div></div></div>
+          </div>
+        </div>
+      `;
+    }
+
+    Object.keys(hints).forEach(key => {
+      const col = document.getElementById(`col-${key}`);
+      const list = document.getElementById(`list-${key}`);
+     
+      let uniqueMap = new Map();
+      hints[key].forEach(item => {
+        if(item.en) uniqueMap.set(item.en, item.jp);
+      });
+
+      if(uniqueMap.size > 0) {
+        col.classList.remove('hide-element');
+        let htmlStr = "";
+        uniqueMap.forEach((jp, en) => {
+          let displayJp = jp;
+          if(key === 'sub') displayJp = jp.replace(/[はたす]$/, '');
+          if(key === 'verb' && jp !== "ほしい") displayJp = jp;
+
+          htmlStr += `
+            <div class="hint-item">
+              <span class="hint-en">${en}</span>
+              <span class="hint-jp">${displayJp ? '(' + displayJp + ')' : ''}</span>
+            </div>`;
+        });
+        list.innerHTML = htmlStr;
+      } else {
+        col.classList.add('hide-element');
+      }
+    });
+  }
+
+  function clearAll() {
+    questions.forEach(q => {
+      ['subJp','subEn','verbJp','verbEn','nounJp','nounEn','placeJp','placeEn','timeJp','timeEn'].forEach(k => {
+        document.getElementById(`in-${k}-${q.num}`).value = "";
+      });
+    });
+    update();
+  }
+
+  function loadBasicSample() {
+    const basic = [
+      { num: 1, subJp: "わたしは", subEn: "I", verbJp: "教え", verbEn: "teach", nounJp: "算数", nounEn: "math", placeJp: "", placeEn: "", timeJp: "", timeEn: "" },
+      { num: 2, subJp: "あなたは", subEn: "You", verbJp: "し", verbEn: "play", nounJp: "野球", nounEn: "baseball", placeJp: "", placeEn: "", timeJp: "", timeEn: "" },
+      { num: 3, subJp: "わたしたちは", subEn: "We", verbJp: "話し", verbEn: "speak", nounJp: "英語", nounEn: "English", placeJp: "", placeEn: "", timeJp: "", timeEn: "" },
+      { num: 4, subJp: "あなたたちは", subEn: "You", verbJp: "使い", verbEn: "use", nounJp: "PC", nounEn: "a computer", placeJp: "", placeEn: "", timeJp: "", timeEn: "" },
+      { num: 5, subJp: "ぼくは", subEn: "I", verbJp: "ほしい", verbEn: "want", nounJp: "自転車", nounEn: "a bicycle", placeJp: "", placeEn: "", timeJp: "", timeEn: "" }
+    ];
+    setFormData(basic);
+  }
+
+  function loadFullSample() { setFormData(questions); }
+
+  function setFormData(data) {
+    data.forEach(q => {
+      ['subJp','subEn','verbJp','verbEn','nounJp','nounEn','placeJp','placeEn','timeJp','timeEn'].forEach(k => {
+        document.getElementById(`in-${k}-${q.num}`).value = q[k];
+      });
+    });
+    update();
+  }
+
+  renderForm();
+  update();
+</script>
+
+</body>
+</html>
