@@ -76,27 +76,29 @@
     .preview-scroll-box { background: transparent !important; border: none !important; padding: 0 !important; overflow: visible !important; display: block !important; }
 
     #worksheet-area {
-      display: block !important;
-      width: 100% !important;
-      max-width: 100% !important;
-      padding: 0 !important;
-      background: transparent !important;
+  display: block !important;
+  width: 190mm !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  background: transparent !important;
+
     }
    
     /* 💡【追加】印刷時だけ各問題の隙間（外側の余白）を少し詰める（12px → 6px） */
-    .question-block {
-      margin-bottom: 6px !important;
-      padding: 8px 12px !important; /* 内側の余白も少しスリムに */
-    }
+    .question-block{
+    margin-bottom:4px !important;
+    padding:6px 10px !important;
+}
 
     /* 【追加】印刷時だけ英語・疑問文のノート（解答欄）の高さを少し詰める（44px → 38px） */
     .write-box {
-      height: 38px !important;
+      height: 34x !important;
     }
     /* 【追加】4本線ノートを選んでいる場合、線の幅も38pxに合わせて自動調整 */
     .write-box.four-lines {
-      background-size: 100% 38px !important;
-      background-position: 0 27px, 0 8px, 0 17px, 0 36px !important;
+      background-size: 100% 34px !important;
+      background-position: 0 24px, 0 7px, 0 15px, 0 32px !important;
     }
 
     /* 【追加】印刷時だけ最下部のチェックリストの隙間を詰める */
@@ -121,7 +123,7 @@
     .hide-element { display: none !important; }
    
     /*  プリンターやブラウザ固有の余白対策として、上下左右の余白を「10mm」に微調整 */
-    @page { size: A4 portrait; margin: 10mm; }
+    @page { size: A4 portrait; margin: 6mm; }
   }
 </style>
 </head>
