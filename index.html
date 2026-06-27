@@ -262,10 +262,9 @@
         else { autoJpSentence += d.nounJp + "を "; }
       }
      
-      if(d.verbJp) {
-        if(d.verbJp === "ほしい") { autoJpSentence += "ほしいです。"; }
-        else { autoJpSentence += d.verbJp + "ます。"; }
-      }
+     if(d.verbJp) {
+  autoJpSentence += d.verbJp + "。";
+}
 
       qContainer.innerHTML += `
         <div class="question-block">
