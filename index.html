@@ -68,7 +68,10 @@
   .checklist-flex { display: flex; gap: 30px; font-size: 9.5pt; font-weight: bold; justify-content: center; color: #2c3e50; }
  
   .hide-element { display: none !important; }
-
+#worksheet-area {
+  transform: scale(0.97);
+  transform-origin: top center;
+}
   /* --- ⬇︎【修正】印刷時だけの絶対ルール（A4一枚にキチッと収める） --- */
   @media print {
     .app-container { background: transparent !important; box-shadow: none !important; margin: 0 !important; padding: 0 !important; max-width: 100% !important; }
